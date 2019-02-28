@@ -2,14 +2,27 @@ const express = require('express')
 const routes = express()
 const fs = require('fs')
 const Model = require ('../models')
+const Verify = require('../middleware/verify')
 
 
 routes.use(express.json())
 routes.use(express.urlencoded({extended: true}))
 
+routes.use((req,res,next) => {
+    if(req.session.login) {
+        next()
+    } else {
+        res.redirect('/home')
+    }
+})
+
+
 //dari res.redirect(/alcohols/sesuatu.id/result)
 
-routes.get('/:id/result', (req, res) => {
+routes.get('/:id/result', Verify, (req, res) => {
+
+
+    console.log("cek session ====>", req.session.login.id)
     console.log("Masuk ke result alcohol ===>", Number(req.params.id), req.query,req.body)
     Model.User.findOne({where: {id: req.params.id}})
     .then ((result) => {
@@ -85,7 +98,7 @@ routes.get('/:id/result', (req, res) => {
 })
 
 //TAMPILAN UNTUK MENUNJUKKAN SEMUA ALCOHOL YANG DIPESAN BERDASARKAN BANYAK ORANG
-routes.get('/result', (req,res) => {
+routes.get('/result', Verify, (req,res) => {
     Model.Alcohol.findAll({
         include: [{
             model: Model.User,
@@ -107,7 +120,7 @@ routes.get('/result', (req,res) => {
 })
 
 //TAMPILAN UNTUK MENUNJUKKAN SEMUA USER DAN PESAN ALCOHOL APA
-routes.get('/result/user', (req,res) => {
+routes.get('/result/user', Verify, (req,res) => {
     Model.User.findAll({
         include: [{
             model: Model.Alcohol,
@@ -129,7 +142,7 @@ routes.get('/result/user', (req,res) => {
 })
 
 //TAMPILAN UNTUK USER MENAMBAH ALCOHOL
-routes.get('/:id/manual', (req, res) => {
+routes.get('/:id/manual', Verify, (req, res) => {
     console.log("Masuk ke result ===>", req.params)
     Model.User.findByPk(req.params.id)
     .then(resultUser => {
@@ -156,7 +169,7 @@ routes.get('/:id/manual', (req, res) => {
 })
 
 //TAMPILAN UNTUK USER MENAMBAH ALCOHOL DAN SIMPAN
-routes.post('/:id/manual', (req, res) => {
+routes.post('/:id/manual', Verify,(req, res) => {
     console.log("Hasil Tambah Alcohol ===>", req.params, req.body)
     Model.UserAlcohol.create({
         UserId: req.params.id,
@@ -175,7 +188,7 @@ routes.post('/:id/manual', (req, res) => {
 })
 
 //TAMPILAN UNTUK USER  MELIHAT SEMUA ALCOHOL YANG DIA SUKA DAN  BISA TAMBAH LAGI
-routes.get('/:id/newresult', (req,res) => {
+routes.get('/:id/newresult', Verify, (req,res) => {
     console.log("Hasil Summary Tambah Alcohol ===>", req.params, req.body)
     Model.User.findAll({
         where: {id: Number(req.params.id)},
@@ -199,7 +212,7 @@ routes.get('/:id/newresult', (req,res) => {
 })
 
 
-routes.get('/:id/delete', (req,res) => {
+routes.get('/:id/delete', Verify, (req,res) => {
     console.log("Hasil Summary untuk Delete Alcohol ===>", req.params, req.body)
     Model.User.findAll({
         where: {id: Number(req.params.id)},
@@ -222,7 +235,7 @@ routes.get('/:id/delete', (req,res) => {
     })
 })
 
-routes.post('/:id/delete', (req,res) => {
+routes.post('/:id/delete', Verify, (req,res) => {
     console.log("Yuk Delete", req.params, req.body)
     Model.UserAlcohol.destroy ({where: {
         UserId: Number(req.params.id),
