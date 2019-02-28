@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> <%= title %> </title>
+<style>
+.headline {
+    color:  #0903ff;
+    font-size: 30px;
+}
+.back {
+    color:  #0903ff;
+    font-size: 14px;
+}
+
+.submit {
+  background-color: #0903ff;
+  color: white;
+  padding: 16px 5px;
+  margin: 8px 10px;
+  border: none;
+  cursor: pointer;
+  width: 10%;
+  opacity: 1;
+}
+
+</style>
+</head>
+<body>
+<p class=headline>Table </p>
+
+<table border =1>
+    <thead>
+        <td>Alcohol Name</td>
+        <td>Users</td>
+    </thead>
+    <tbody>
+        <% var i = 0 %>
+        <% for(let alcoholList of alcoholsData) { %>
+            <tr>
+                <td><%= alcoholList.dataValues.alcoholName%></td>
+                <td>
+                    
+                    <% for(let userList of alcoholList.dataValues.Users) { %>
+                        <%= userList.UserAlcohol.dataValues.UserId %>
+                        <% } %>
+                </td>
+            </tr> 
+        <% } %>
+    </tbody>
+</table>
+
+
+
+</body>
+</html>
