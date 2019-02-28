@@ -22,9 +22,7 @@ routes.get('/:id/result', (req, res) => {
             }})
             .then((resultAlcohol) => {
                 console.log("Untuk inside Looping ===>", resultAlcohol)
-                //console.log("Untuk inside Looping ===>", resultAlcohol[0].dataValues)
-                //console.log("Result Masuk ke enrolled student findAll Alcohol ===>", resultAlcohol[0].dataValues.Users[0].dataValues.UserAlcohol)
-                
+
                 // var scoreName = []
                 // for(let alcoholList of resultAlcohol) {
                 //     for(let subjectList of studentList.dataValues.Subjects) {
@@ -35,7 +33,7 @@ routes.get('/:id/result', (req, res) => {
                 
                 //Dimatikan supaya data tidak disimpan
                 // for(let alcoholList of resultAlcohol) {
-                //     //console.log("untuk simpan ===> ", result.dataValues.firstName, alcoholList.alcoholName, alcoholList.id)
+                //     console.log("untuk simpan ===> ", result.dataValues.firstName, alcoholList.alcoholName, alcoholList.id)
                 //     Model.UserAlcohol.create({
                 //         UserId: result.dataValues.id,
                 //         AlcoholId: alcoholList.id,
@@ -60,6 +58,17 @@ routes.get('/:id/result', (req, res) => {
             .then((resultAlcohol) => {
                 console.log("Untuk inside Looping ===>", resultAlcohol)
                 
+                //Dimatikan supaya data tidak disimpan
+                // for(let alcoholList of resultAlcohol) {
+                //     console.log("untuk simpan ===> ", result.dataValues.firstName, alcoholList.alcoholName, alcoholList.id)
+                //     Model.UserAlcohol.create({
+                //         UserId: result.dataValues.id,
+                //         AlcoholId: alcoholList.id,
+                //         createdAt: new Date(),
+                //         updatedAt: new Date ()
+                //     })
+                // }
+                
                 res.render('alcohol', {
                     message: 'All Alcohol Data based on User',
                     title: 'List Alcohol',
@@ -75,6 +84,7 @@ routes.get('/:id/result', (req, res) => {
     })
 })
 
+//TAMPILAN UNTUK MENUNJUKKAN SEMUA ALCOHOL YANG DIPESAN BERDASARKAN BANYAK ORANG
 routes.get('/result', (req,res) => {
     Model.Alcohol.findAll({
         include: [{
@@ -96,27 +106,45 @@ routes.get('/result', (req,res) => {
     })
 })
 
+//TAMPILAN UNTUK MENUNJUKKAN SEMUA USER DAN PESAN ALCOHOL APA
+routes.get('/result/user', (req,res) => {
+    Model.User.findAll({
+        include: [{
+            model: Model.Alcohol,
+        }]
+    })
+    .then (resultUser => {
+        console.log("All Data", resultUser)
+        //console.log("Result Masuk ke findAll Users ===>", resultUser[0].dataValues.Alcohols[0].dataValues.alcoholName)
+        res.render('alcoholresultuser', {
+            message: 'All User Data based on Alcohol',
+            title: 'List Data',
+            usersData : resultUser
+        })
+    })
+    .catch (err => {
+        console.log("Terjadi error =====>",  err)
+        res.send(err)
+    })
+})
 
-
+//TAMPILAN UNTUK USER MENAMBAH ALCOHOL
 routes.get('/:id/manual', (req, res) => {
     console.log("Masuk ke result ===>", req.params)
     Model.User.findByPk(req.params.id)
     .then(resultUser => {
         console.log("Hasil User ===> ", resultUser)
-        Model.Alcohol.findAll({
-            where: {CategoryId: 1}
-        })
+        Model.Alcohol.findAll()
         .then (resultAlcohol => {
             console.log("Seluruh Hasil: ", resultAlcohol[0].dataValues)
         // console.log("Result Masuk ke enrolled student findAll Student ===>", resultAlcohol[0].dataValues.Alcohols[0].dataValues.UserAlcohol)
         // console.log("Untuk inside Looping ===>", resultAlcohol[0].dataValues)
-        res.render('alcohol', {
-            message: 'Rekomendasi untuk Anda',
-            title: 'Rekomendasi untuk Anda',
-            alcoholsData : resultAlcohol.dataValues,
+        res.render('alcoholadd', {
+            message: 'Tambah Alcohol Sesuai Selera Anda',
+            title: 'Tambah Alcohol',
+            alcoholsData : resultAlcohol,
             usersData: resultUser
         })
-    
     })
         
     })
@@ -124,115 +152,85 @@ routes.get('/:id/manual', (req, res) => {
         console.log("Terjadi error =====>")
         res.send(err)
     })
-    // Model.Alcohol.findByPk(req.params.id)
-    // .then ((result) => {
-    //     console.log("Result Masuk ke enrolled student ===>", result.dataValues)
-    //     Model.User.findAll({
-    //         include: [{
-    //             model: Model.Alcohol,
-    //             where: {id : req.params.id}
-    //         }]
-    //     })
-    //     .then((resultUser) => {
-    //         console.log("Result Masuk ke enrolled student findAll Student ===>", resultUser[0].dataValues.Alcohols[0].dataValues.UserAlcohol)
-    //         console.log("Untuk inside Looping ===>", resultUser[0].dataValues)
-    //         // var scoreName = []
-    //         // for(let userList of resultUser) {
-    //         //     for(let alcoholList of userList.dataValues.Alcohols) {
-    //         //         scoreName.push(getScoreLetter(subjectList.SubjectStudent.dataValues.score))
-    //         //     }
-    //         // }
-    //         // console.log("Hasil Looping Score Letter", scoreName)
- 
-    //         res.render('alcohol', {
-    //             message: 'Rekomendasi untuk Anda',
-    //             title: 'Rekomendasi',
-    //             alcoholsData : result.dataValues,
-    //             usersData : resultUser
-    //         })
-    //     })
-    // })
     
 })
 
-routes.get('/:id/result', (req,res) => {
-    console.log("Awal Result Alcohol input", req.params, req.query)
-    Model.UserAlcohol.findByPk(req.params.id)
-    .then (result => {
-        console.log("masuk ejs Result Alcohol", result)
-        console.log("Subjectsdata dalam ejs", result.dataValues)
-        res.render('alcohol', {
-            message: 'Rekomendasi untuk Anda',
-            title: 'Rekomendasi untuk Anda',
-            alcoholsData : result.dataValues
+//TAMPILAN UNTUK USER MENAMBAH ALCOHOL DAN SIMPAN
+routes.post('/:id/manual', (req, res) => {
+    console.log("Hasil Tambah Alcohol ===>", req.params, req.body)
+    Model.UserAlcohol.create({
+        UserId: req.params.id,
+        AlcoholId: req.body.id,
+        createdAt: new Date(),
+        updatedAt: new Date ()
+    })
+
+    .then((result) => {
+        res.redirect(`/alcohols/${req.params.id}/newresult`)
+    })
+    .catch ((err) => {
+        res.send(err)
+    })
+
+})
+
+//TAMPILAN UNTUK USER  MELIHAT SEMUA ALCOHOL YANG DIA SUKA DAN  BISA TAMBAH LAGI
+routes.get('/:id/newresult', (req,res) => {
+    console.log("Hasil Summary Tambah Alcohol ===>", req.params, req.body)
+    Model.User.findAll({
+        where: {id: Number(req.params.id)},
+        include: [{
+            model: Model.Alcohol,
+        }]
+    })
+    .then (resultUser => {
+        console.log("All Data", resultUser)
+        //console.log("Result Masuk ke findAll Users ===>", resultUser[0].dataValues.Alcohols[0].dataValues.alcoholName)
+        res.render('alcoholresultnew', {
+            message: 'User Data based on Alcohol',
+            title: 'List Data',
+            usersData : resultUser
         })
     })
     .catch (err => {
+        console.log("Terjadi error =====>",  err)
         res.send(err)
     })
 })
 
-routes.post('/:id/give-score', (req, res) => {
-    console.log("Hasil Give Score ===>", req.params, req.body)
-    Model.SubjectStudent.findByPk(req.params.id)
-    .then(result => {
-        result.score = req.body.score
-        result.updatedAt = new Date ()
-        return result.save()
-    })
-    .then((result) => {
-        res.redirect(`/subjects/${req.body.SubjectId}/enrolled-students`)
-    })
-    .catch ((err) => {
-        res.send(err)
-    })
-    
-    // Model.SubjectStudent.update (req.body.score, {where: {
-    //     id: req.params.id
-    // }})
-})
 
-
-routes.post('/:id/enrolled-student', (req, res) => {})
-
-routes.get('/edit/:id', (req,res) => {
-    console.log("Edit bro ==>", req.params.id)
-    Model.Subject.findByPk (req.params.id)
-    .then ((result)=>{
-        console.log("Ini result ====> ", result.dataValues.id)
-        res.render('subjectsedit', {
-            message: 'Edit Data Subject',
-            title: 'Edit Data',
-            subjectsData : result.dataValues
+routes.get('/:id/delete', (req,res) => {
+    console.log("Hasil Summary untuk Delete Alcohol ===>", req.params, req.body)
+    Model.User.findAll({
+        where: {id: Number(req.params.id)},
+        include: [{
+            model: Model.Alcohol,
+        }]
+    })
+    .then (resultUser => {
+        console.log("All Data", resultUser)
+        //console.log("Result Masuk ke findAll Users ===>", resultUser[0].dataValues.Alcohols[0].dataValues.alcoholName)
+        res.render('alcoholdelete', {
+            message: 'User Data based on Alcohol',
+            title: 'List Data',
+            usersData : resultUser
         })
     })
-    .catch ((err) => {
-        res.send(err)
-    })
-    
-})
-
-routes.post('/edit/:id', (req,res) => {
-    console.log("Hasil Edit ===>", req.params, req.body)
-    Model.Subject.update (req.body, {where: {
-        id: req.params.id
-    }})
-    .then((result) => {
-        res.redirect('/subjects')
-    })
-    .catch ((err) => {
+    .catch (err => {
+        console.log("Terjadi error =====>",  err)
         res.send(err)
     })
 })
 
-routes.get('/delete/:id', (req,res) => {
+routes.post('/:id/delete', (req,res) => {
     console.log("Yuk Delete", req.params, req.body)
-    Model.Subject.destroy ({where: {
-        id: req.params.id
+    Model.UserAlcohol.destroy ({where: {
+        UserId: Number(req.params.id),
+        AlcoholId: Number(req.body.id)
     }})
     
     .then((result) => {
-        res.redirect('/subjects')
+        res.redirect(`/alcohols/${req.params.id}/newresult`)
     })
     .catch((err) => {
         res.send(err)

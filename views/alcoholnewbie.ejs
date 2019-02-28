@@ -26,9 +26,9 @@
 </style>
 </head>
 <body>
-<p class=headline>Alcohols Summary </p>
+<p class=headline>Newbie </p>
 
-<a href="/alcohols/result/user">Based On Users</a>
+<a href="/alcohols/result/newbie">New to Alcohol</a>
 
 <table border =1>
     <thead>
@@ -42,7 +42,9 @@
                 <td><%= alcoholList.dataValues.alcoholName%></td>
                 <td>
                     
-                    <%= alcoholList.dataValues.Users.length%>
+                    <% for(let userList of alcoholList.dataValues.Users) { %>
+                        <%= userList.UserAlcohol.dataValues.UserId %>
+                        <% } %>
                 </td>
             </tr> 
         <% } %>

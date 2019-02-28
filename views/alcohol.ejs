@@ -26,7 +26,8 @@
 </style>
 </head>
 <body>
-<p class=headline><%= usersData.firstName %></p>
+<p class=headline>Hi, <%= usersData.firstName %> </p>
+<p>Berikut ini alcohol sesuai selera Anda</p>
 
 <table border =1>
         <thead>
@@ -46,8 +47,8 @@
         </tbody>
 </table>
 
-<a href="">Ganti Attributes</a>
-<a href="/alcohols/<%= usersData.id %>/manual">Pilih Alcohol Manual</a>
+<p>Wanna add more alcohol to your list?</p>
+<a href="/alcohols/<%= usersData.id %>/manual">More Alcohol</a>
 
 </body>
 </html>
