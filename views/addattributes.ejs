@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<p class=headline><%= message %></p>
+    
+    Choose Your Preferences:
+    <form METHOD="POST" action="/home/<%= usersData.id %>/addattributes">
+        Have you ever drunken alcohol?
+        <select  name="isAlcohol">
+            <option value="yes"> Yes </option>
+            <option value="no"> No </option>
+        </select>
+        <br>
+    Choose Drink Body:
+    <select  name="drinkBody">
+        <option value="Light"> Light </option>
+        <option value="Medium"> Medium </option>
+        <option value="High"> High </option>
+    </select>
+    <br>
+    Choose After Taste:
+    <select  name="afterTaste">
+        <option value="Light"> Light </option>
+        <option value="Medium"> Medium </option>
+        <option value="High"> High </option>
+    </select>
+    <br>
+    <button type="submit">Add Your Preference</button>
+</form>
+</body>
+</html>

@@ -4,7 +4,8 @@ const model = require("../models");
 const checkPassword = require("../helpers/checkPassword");
 
 router.get("/", (req, res) => {
-  res.render("home");
+  console.log("cek session ====>", req.session.login)
+  res.render("home", {isLogin: req.session.login});
 });
 
 router.get("/reg", function(req, res) {
@@ -46,13 +47,27 @@ router.post("/login", function(req, res) {
   })
     .then(name => {
       // console.log(req.body.Password);
+      console.log("Hasil Login ==>", name)
       if (name) {
         // console.log(name.password)
         const decrypt = checkPassword(req.body.Password, name.password)
         if (decrypt) {
-
+          
+          req.session.login = {
+            username: name.userName,
+            id: name.id
+          }
+          console.log("Cek Session===> ", req.session)
+          if (name.isAlcohol == null || name.drinkBody == null || name.afterTaste == null) {
+            res.redirect (`users/${name.id}/addattributes`)
+          } else if (name.isAlcohol != null && name.drinkBody != null && name.afterTaste != null) {
+            res.redirect('/alcohols/'+name.id+'/newresult')
+          }
+          //res.redirect('/alcohols/'+name.id+'/result')
+            //`alcohols/${name.id}/result`)
+          //res.send('Ini Sukses')
         } else {
-          // password salah
+          //res.send
         }
       } else {
 
@@ -73,5 +88,36 @@ router.post("/login", function(req, res) {
       res.send("Bad Request");
     });
 });
+
+router.get("/users/:id/addattributes", function(req, res) {
+  model.User.findOne({
+    where: {id: req.params.id}
+  })
+  .then(resultUser => {
+    console.log("Hasil untuk add attributes ===>", resultUser)
+    res.render('addattributes', {
+      message: 'Please add your preferences before we give our alcohol recommendation',
+      title: 'Add Attributes',
+      usersData : resultUser
+  })
+  })
+});
+
+router.post("/:id/addattributes", (req,res) => {
+  console.log("Hasil Update Preference ==>",  req.body)
+  model.User.findByPk(req.params.id)
+    .then(user => {
+        user.isAlcohol = req.body.isAlcohol
+        user.drinkBody = req.body.drinkBody
+        user.afterTaste = req.body.afterTaste
+        return user.save()
+    })
+  .then((result) => {
+    res.redirect('/alcohols/'+req.params.id+'/result')
+  })
+  .catch ((err) => {
+    res.send(err)
+  })
+})
 
 module.exports = router;

@@ -4,7 +4,7 @@ const port = 3000;
 const session = require('express-session')
 const router = require("./routes/index");
 //const routerUser = require("./routes/users");
-// const routerAlcohol = require("./routes/alcohols");
+const routerAlcohol = require("./routes/alcohols");
 
 app.use(session({
   secret: 'alcoholadvisor'
@@ -20,7 +20,7 @@ app.use("/home",router);
 //app.use("/",router);
 //app.use("/users", routerUser);
 //Subject
-// app.use("/alcohols", routerAlcohol);
+app.use("/alcohols", routerAlcohol);
 //Student
 
 
