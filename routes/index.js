@@ -63,11 +63,11 @@ router.post("/login", function(req, res) {
             name.afterTaste == null
           ) {
             res.redirect(`users/${name.id}/addattributes`);
-          } else if (
+          } else /*if (
             name.isAlcohol != null &&
             name.drinkBody != null &&
             name.afterTaste != null
-          ) {
+          )*/ {
             res.redirect("/alcohols/" + name.id + "/newresult");
           }
           //res.redirect('/alcohols/'+name.id+'/result')
