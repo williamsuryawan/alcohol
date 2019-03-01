@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <style>
+      .headline {
+        color: #0903ff;
+        font-size: 30px;
+      }
+      .back {
+        color: #0903ff;
+        font-size: 14px;
+      }
+
+      .submit {
+        background-color: #0903ff;
+        color: white;
+        padding: 16px 5px;
+        margin: 8px 10px;
+        border: none;
+        cursor: pointer;
+        width: 10%;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body style="text-align:center">
+    <div class="header">
+      <a href="/home">Home</a>
+      <a href="/home/logout">Log Out</a>
+    </div>
+
+    <p style="text-align:center" class="headline">Drinkers Summary</p>
+
+    <a href="/alcohols/result">Based On Product</a>
+    <div align="center">
+      <table style="text-align:center" border="1">
+        <thead>
+          <td>User Name</td>
+          <td>Alcohol Concentration Type</td>
+          <td>Users</td>
+        </thead>
+        <tbody>
+          <% var i = 0 %> <% for(let userList of usersData) { %>
+          <tr>
+            <td><%= userList.dataValues.id%></td>
+            <td>
+              <% if(userList.dataValues.isAlcohol == 'yes') {%> High <% } else {
+              %> Low <% } %>
+            </td>
+            <td>
+              <% for(let alcoholList of userList.dataValues.Alcohol) { %> <%=
+              alcoholList.dataValues.alcoholName %>
+              <br />
+              <% } %>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

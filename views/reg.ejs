@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Registrasi</title>
+  <style>
+  table,th,td {
+    border: 1px solid black
+  }
+  </style>
+  <% include ../views/partial/style %>
+</head>
+<body>
+    
+    <% include ../views/partial/header %>
+    
+  <h1 style="text-align:center">Welcome To alcohol</h1>
+
+  <!-- Buat Tabel data Input dan tampilkan-->
+  <br>
+    <form style="text-align:center" method="post">
+      First Name  : <br>
+      <input type="text" name="First Name" required><br><br>
+      Last Name   : <br>
+      <input type="text" name = "Last Name" required><br><br>
+      Birthday       : <br>
+      <input type="date" name="Birthday"> <br><br>  
+      Email       : <br>
+      <input type="text" name="Email" required><br><br>
+      Username       : <br>
+      <input type="text" name="Username" required><br><br>
+      Password       : <br>
+      <input type="password" name="Password"><br><br>
+      
+      <input type='submit' value='Registrasi'>
+    </form>
+</html>
