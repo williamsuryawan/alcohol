@@ -9,17 +9,18 @@
   table,th,td {
     border: 1px solid black
   }
-  
   </style>
+  <% include ../views/partial/style %>
 </head>
 <body>
-  <!-- Bagian Judul Atas dan add Student -->
-  <h1>Welcome To alcohol</h1>
-  <!-- <a href="/teacher">Show All Data</a><br> -->
+    
+    <% include ../views/partial/header %>
+    
+  <h1 style="text-align:center">Welcome To alcohol</h1>
 
-  <!-- Buat Tabel data Id, First Name, Last Name, Email, Option dan tampilkan-->
+  <!-- Buat Tabel data Input dan tampilkan-->
   <br>
-    <form method="post">
+    <form style="text-align:center" method="post">
       First Name  : <br>
       <input type="text" name="First Name" required><br><br>
       Last Name   : <br>

@@ -4,19 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <% include ../views/partial/style %>
   <title>Alcohol Advisor</title>
 </head>
 <body>
 
-  <h1>Welcome to the alcohol Advisor</h1>
-  <img src="/v4-728px-Drink-Wine-Step-4-Version-2.jpg" width="416" height="416"><br>
+  <% include ../views/partial/header %>
+  <h1 style="text-align:center">Welcome to the alcohol Advisor</h1>
+  <img style="display:block; margin:auto" src="/v4-728px-Drink-Wine-Step-4-Version-2.jpg" width="416" height="416"><br>
   
-  <% if (isLogin) { %>
-    <a href="/alcohols//result">Hahahahaha</a>
-  <% } else { %> 
-  <a href="/home/reg">Registrasi</a> | <a href="/home/login">Login</a><br><br>
-    <% } %>
 
-  <h1>Disini anda dapat menentukan pilihan dengan rasa angur yang anda inginkan</h1 >
+  <h1 style="text-align:center">Disini anda dapat menentukan pilihan dengan rasa angur yang anda inginkan</h1 >
 </body>
 </html>
