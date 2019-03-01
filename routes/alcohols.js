@@ -98,7 +98,7 @@ routes.get('/:id/result', Verify, (req, res) => {
 })
 
 //TAMPILAN UNTUK MENUNJUKKAN SEMUA ALCOHOL YANG DIPESAN BERDASARKAN BANYAK ORANG
-routes.get('/result', Verify, (req,res) => {
+routes.get('/result', (req,res) => {
     Model.Alcohol.findAll({
         include: [{
             model: Model.User,
@@ -120,7 +120,7 @@ routes.get('/result', Verify, (req,res) => {
 })
 
 //TAMPILAN UNTUK MENUNJUKKAN SEMUA USER DAN PESAN ALCOHOL APA
-routes.get('/result/user', Verify, (req,res) => {
+routes.get('/result/user', (req,res) => {
     Model.User.findAll({
         include: [{
             model: Model.Alcohol,
