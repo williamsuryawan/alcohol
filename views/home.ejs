@@ -15,5 +15,9 @@
   
 
   <h1 style="text-align:center">Disini anda dapat menentukan pilihan dengan rasa angur yang anda inginkan</h1 >
+    <%if (isLogin) {%>
+      <h1 style="text-align:center"></h1><a href="/alcohols/<%=isLogin.id%>/result> Your Alcohol List </a></h1 >
+    <%}%>
+    
 </body>
 </html>
