@@ -4,8 +4,8 @@ const model = require("../models");
 const checkPassword = require("../helpers/checkPassword");
 
 router.get("/", (req, res) => {
-  console.log("cek session ====>", req.session.login)
-  res.render("home", {isLogin: req.session.login});
+  console.log("cek session ====>", req.session.login);
+  res.render("home", { isLogin: req.session.login });
 });
 
 router.get("/reg", function(req, res) {
@@ -47,30 +47,36 @@ router.post("/login", function(req, res) {
   })
     .then(name => {
       // console.log(req.body.Password);
-      console.log("Hasil Login ==>", name)
+      console.log("Hasil Login ==>", name);
       if (name) {
         // console.log(name.password)
-        const decrypt = checkPassword(req.body.Password, name.password)
+        const decrypt = checkPassword(req.body.Password, name.password);
         if (decrypt) {
-          
           req.session.login = {
             username: name.userName,
             id: name.id
-          }
-          console.log("Cek Session===> ", req.session)
-          if (name.isAlcohol == null || name.drinkBody == null || name.afterTaste == null) {
-            res.redirect (`users/${name.id}/addattributes`)
-          } else if (name.isAlcohol != null && name.drinkBody != null && name.afterTaste != null) {
-            res.redirect('/alcohols/'+name.id+'/newresult')
+          };
+          console.log("Cek Session===> ", req.session);
+          if (
+            name.isAlcohol == null ||
+            name.drinkBody == null ||
+            name.afterTaste == null
+          ) {
+            res.redirect(`users/${name.id}/addattributes`);
+          } else if (
+            name.isAlcohol != null &&
+            name.drinkBody != null &&
+            name.afterTaste != null
+          ) {
+            res.redirect("/alcohols/" + name.id + "/newresult");
           }
           //res.redirect('/alcohols/'+name.id+'/result')
-            //`alcohols/${name.id}/result`)
+          //`alcohols/${name.id}/result`)
           //res.send('Ini Sukses')
         } else {
           //res.send
         }
       } else {
-
       }
       // if (name.password === newUser["Password"]) {
       //   req.session.login = {
@@ -91,33 +97,44 @@ router.post("/login", function(req, res) {
 
 router.get("/users/:id/addattributes", function(req, res) {
   model.User.findOne({
-    where: {id: req.params.id}
-  })
-  .then(resultUser => {
-    console.log("Hasil untuk add attributes ===>", resultUser)
-    res.render('addattributes', {
-      message: 'Please add your preferences before we give our alcohol recommendation',
-      title: 'Add Attributes',
-      usersData : resultUser
-  })
-  })
+    where: { id: req.params.id }
+  }).then(resultUser => {
+    console.log("Hasil untuk add attributes ===>", resultUser);
+    res.render("addattributes", {
+      message:
+        "Please add your preferences before we give our alcohol recommendation",
+      title: "Add Attributes",
+      usersData: resultUser
+    });
+  });
 });
 
-router.post("/:id/addattributes", (req,res) => {
-  console.log("Hasil Update Preference ==>",  req.body)
+router.post("/:id/addattributes", (req, res) => {
+  console.log("Hasil Update Preference ==>", req.body);
   model.User.findByPk(req.params.id)
     .then(user => {
-        user.isAlcohol = req.body.isAlcohol
-        user.drinkBody = req.body.drinkBody
-        user.afterTaste = req.body.afterTaste
-        return user.save()
+      user.isAlcohol = req.body.isAlcohol;
+      user.drinkBody = req.body.drinkBody;
+      user.afterTaste = req.body.afterTaste;
+      return user.save();
     })
-  .then((result) => {
-    res.redirect('/alcohols/'+req.params.id+'/result')
-  })
-  .catch ((err) => {
-    res.send(err)
-  })
-})
+    .then(result => {
+      res.redirect("/alcohols/" + req.params.id + "/result");
+    })
+    .catch(err => {
+      res.send(err);
+    });
+});
+
+router.get("/logout", (req, res) => {
+  console.log("jancook");
+  if (req.session.login) {
+    // res.clearCookie('user_sid');
+    req.session.destroy();
+    res.redirect("/home");
+  } else {
+    res.redirect("login");
+  }
+});
 
 module.exports = router;
